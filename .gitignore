@@ -1,6 +1,10 @@
 .DS_Store
-__pycache__/
+*.log
+*.tmp
+*.bak
 *.py[cod]
+*.egg-info/
+__pycache__/
 build/
 develop-eggs/
 dist/
@@ -11,4 +15,3 @@ lib64/
 parts/
 sdist/
 var/
-*.egg-info/
