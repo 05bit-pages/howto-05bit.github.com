@@ -39,47 +39,56 @@
     <div class="row">
         <div class="col-lg-9">
             
-    <h1>How to add a user to sudoers?</h1>
-<p>You will probably need to add user to sudoers so they could run commands via <code>sudo</code>.</p>
+    <h1>How to configure SSH server for better security?</h1>
+<p>Default SSH configuration on most Linux distributions is relied on password authentication, which is not that much secure.</p>
+<h3>Basic steps</h3>
 <ol>
-<li><p>First you may need to create the user under <code>root</code>.<br>
-Let's say we need to add the new <code>sentry</code> user:</p>
-<div class="highlight"><pre><span></span>adduser sentry
+<li><p>Add your public key to <code>~/.ssh/authorized_keys</code>:</p>
+<div class="highlight"><pre><span></span>mkdir -p ~/.ssh <span class="o">&amp;&amp;</span><span class="se">\</span>
+ chmod <span class="m">700</span> ~/.ssh <span class="o">&amp;&amp;</span><span class="se">\</span>
+ cat &gt; ~/.ssh/authorized_keys
 </pre></div>
-<p>you'll see the output like that:</p>
-
-<pre><code> Adding user `sentry' ...
- Adding new group `sentry' (1000) ...
- Adding new user `sentry' (1000) with group `sentry' ...
- Creating home directory `/home/sentry' ...
- Copying files from `/etc/skel' ...
- Enter new UNIX password:</code></pre>
+<p>(^D to save)</p>
 </li>
-<li><p>Then add the new user to the <code>sudo</code> group:</p>
-<div class="highlight"><pre><span></span>usermod -aG sudo sentry
+<li><p>Edit the <code>/etc/ssh/sshd_config</code>:</p>
+<div class="highlight"><pre><span></span>vi /etc/ssh/sshd_config
+</pre></div>
+<p>add or update the following settings</p>
+
+<pre><code> ChallengeResponseAuthentication no
+ PasswordAuthentication no
+ UsePAM no</code></pre>
+</li>
+<li><p>Restart SSH server:</p>
+<div class="highlight"><pre><span></span>service ssh restart
 </pre></div>
 </li>
 </ol>
-<h3>Another way</h3>
+<h3>Next steps</h3>
+<p>Add more tweaks to <code>/etc/ssh/sshd_config</code>.</p>
 <ol>
-<li><p>Open the <code>/etc/sudoers</code> directly:</p>
-<div class="highlight"><pre><span></span>visudo
-</pre></div>
-<p>or</p>
-<div class="highlight"><pre><span></span>vi /etc/sudoers
-</pre></div>
-</li>
-<li><p>Add a new line for the specific user to sudoers file:</p>
+<li><p>Change the SSH server port, set the value for port different from <code>22</code></p>
 
-<pre><code> # User alias specification
- sentry    ALL=(ALL:ALL) ALL</code></pre>
+<pre><code> Port 1022</code></pre>
+</li>
+<li><p><strong>Important!</strong> Before this step set up <a href="../sudoers/">sudoers</a> first and add <code>~/.ssh/authorized_keys</code> for the new users!</p>
+<div class="highlight"><pre><span></span>mkdir -p /home/SOME_USER/.ssh <span class="o">&amp;&amp;</span><span class="se">\</span>
+ chown SOME_USER:SOME_USER /home/SOME_USER/.ssh <span class="o">&amp;&amp;</span><span class="se">\</span>
+ chmod <span class="m">700</span> /home/SOME_USER/.ssh <span class="o">&amp;&amp;</span><span class="se">\</span>
+ cat &gt; /home/SOME_USER/.ssh/authorized_keys
+</pre></div>
+<p><strong>Login under SOME_USER, not the <code>root</code>!</strong> Because we are going to disable login for the <code>root</code>!</p>
+<div class="highlight"><pre><span></span>sudo vi /etc/ssh/sshd_config
+</pre></div>
+<p>add or update the setting</p>
+
+<pre><code> PermitRootLogin no</code></pre>
+</li>
+<li><p>Restart SSH server:</p>
+<div class="highlight"><pre><span></span>sudo service ssh restart
+</pre></div>
 </li>
 </ol>
-<h3>Related articles</h3>
-<ul>
-<li><a href="http://www.howtogeek.com/50787/add-a-user-to-a-group-or-second-group-on-linux/">Add a User to a Group (or Second Group) on Linux</a></li>
-<li><a href="https://www.digitalocean.com/community/tutorials/how-to-edit-the-sudoers-file-on-ubuntu-and-centos">How To Edit the Sudoers File on Ubuntu and CentOS</a></li>
-</ul>
 
 
         </div>
@@ -99,11 +108,11 @@ Let's say we need to add the new <code>sentry</code> user:</p>
                                 
                                 <ul class="nav nav-pills nav-stacked">
                                     
-                                    <li >
+                                    <li class="active">
                                         <a href="/Linux/safer_ssh/">safer ssh</a>
                                     </li>
                                     
-                                    <li class="active">
+                                    <li >
                                         <a href="/Linux/sudoers/">sudoers</a>
                                     </li>
                                     
