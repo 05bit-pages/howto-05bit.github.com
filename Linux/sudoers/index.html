@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>How To</title>
+    <link rel="icon" type="image/png" href="/favicon.png?_=1" />
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/pygments.css">
+    <link rel="stylesheet" href="/assets/css/docta.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            
+            <a class="navbar-brand logo" href="/" style="background-image: url(/assets/img/question.svg); width: 55px; background-size: 65%;"></a>
+            
+            <a class="navbar-brand" href="/">How To</a>
+        </div>
+
+        
+    </div>
+</nav>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-9">
+            
+    <h1>How to add a user to sudoers?</h1>
+<p>You will probably need to add user to sudoers so they could run commands via <code>sudo</code>.</p>
+<ol>
+<li><p>First you may need to create the user under <code>root</code>.<br>
+Let's say we need to add the new <code>sentry</code> user:</p>
+<div class="highlight"><pre><span></span>adduser sentry
+</pre></div>
+<p>you'll see the output like that:</p>
+
+<pre><code> Adding user `sentry' ...
+ Adding new group `sentry' (1000) ...
+ Adding new user `sentry' (1000) with group `sentry' ...
+ Creating home directory `/home/sentry' ...
+ Copying files from `/etc/skel' ...
+ Enter new UNIX password:</code></pre>
+</li>
+<li><p>Then add the new user to the <code>sudo</code> group:</p>
+<div class="highlight"><pre><span></span>usermod -aG sudo sentry
+</pre></div>
+</li>
+</ol>
+<h3>Another way</h3>
+<ol>
+<li><p>Open the <code>/etc/sudoers</code> directly:</p>
+<div class="highlight"><pre><span></span>visudo
+</pre></div>
+<p>or</p>
+<div class="highlight"><pre><span></span>vi /etc/sudoers
+</pre></div>
+</li>
+<li><p>Add a new line for the specific user to sudoers file:</p>
+
+<pre><code> # User alias specification
+ sentry    ALL=(ALL:ALL) ALL</code></pre>
+</li>
+</ol>
+<h3>Related articles</h3>
+<ul>
+<li><a href="http://www.howtogeek.com/50787/add-a-user-to-a-group-or-second-group-on-linux/">Add a User to a Group (or Second Group) on Linux</a></li>
+<li><a href="https://www.digitalocean.com/community/tutorials/how-to-edit-the-sudoers-file-on-ubuntu-and-centos">How To Edit the Sudoers File on Ubuntu and CentOS</a></li>
+</ul>
+
+
+        </div>
+        <div class="col-lg-3">
+            
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <ul class="nav nav-pills nav-stacked nav-tree">
+                        <li >
+                            <a href="/" class="index">How To</a>
+                            <hr>
+                        </li>
+                        
+                            
+                            <li >
+                                <a href="/Linux/" class="index">Linux Tips</a>
+                                
+                                <ul class="nav nav-pills nav-stacked">
+                                    
+                                    <li class="active">
+                                        <a href="/Linux/sudoers/">sudoers</a>
+                                    </li>
+                                    
+                                </ul>
+                                            
+                            </li>
+                            
+                        
+                    </ul>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<div class="container footer">
+    
+    <hr>
+    <p class="text-muted">&copy; 2016 05Bit</p>
+    
+</div>
+</body>
+</html>
