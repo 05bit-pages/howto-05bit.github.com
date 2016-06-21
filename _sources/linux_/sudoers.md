@@ -1,5 +1,5 @@
 ---
-title: sudoers
+title: Sudoers
 ---
 
 How to add a user to sudoers?

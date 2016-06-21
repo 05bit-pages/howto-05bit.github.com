@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>How To</title>
+    <link rel="icon" type="image/png" href="/favicon.png?_=1" />
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css?_=1">
+    <link rel="stylesheet" href="/assets/css/pygments.css">
+    <link rel="stylesheet" href="/assets/css/docta.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            
+            <a class="navbar-brand logo" href="/" style="background-image: url(/assets/img/question.svg); width: 55px; background-size: 65%;"></a>
+            
+            <a class="navbar-brand" href="/">How To</a>
+        </div>
+
+        
+    </div>
+</nav>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <ul class="nav nav-pills nav-stacked nav-tree">
+                        <li >
+                            <a href="/" class="index">How To</a>
+                            <hr>
+                        </li>
+                        
+                            
+                            <li >
+                                <a href="/linux_/" class="index">Linux Tips</a>
+                                
+                                <ul class="nav nav-pills nav-stacked">
+                                    
+                                    <li class="active">
+                                        <a href="/linux_/safer_ssh/">Safer SSH</a>
+                                    </li>
+                                    
+                                    <li >
+                                        <a href="/linux_/sudoers/">Sudoers</a>
+                                    </li>
+                                    
+                                </ul>
+                                            
+                            </li>
+                            
+                            <li >
+                                <a href="/services/" class="index">Services</a>
+                                            
+                            </li>
+                            
+                        
+                    </ul>
+                </div>
+            </div>
+            
+        </div>
+        <div class="col-md-9">
+            
+    <h1>How to configure SSH server for better security?</h1>
+<p>Default SSH configuration on most Linux distributions is relied on password authentication, which is not that much secure.</p>
+<h3>Basic steps</h3>
+<ol>
+<li><p>Add your public key to <code>~/.ssh/authorized_keys</code>:</p>
+<div class="highlight"><pre><span></span>mkdir -p ~/.ssh <span class="o">&amp;&amp;</span><span class="se">\</span>
+ chmod <span class="m">700</span> ~/.ssh <span class="o">&amp;&amp;</span><span class="se">\</span>
+ cat &gt; ~/.ssh/authorized_keys
+</pre></div>
+<p>(^D to save)</p>
+</li>
+<li><p>Edit the <code>/etc/ssh/sshd_config</code>:</p>
+<div class="highlight"><pre><span></span>vi /etc/ssh/sshd_config
+</pre></div>
+<p>add or update the following settings</p>
+
+<pre><code> ChallengeResponseAuthentication no
+ PasswordAuthentication no
+ UsePAM yes</code></pre>
+</li>
+<li><p>Restart SSH server:</p>
+<div class="highlight"><pre><span></span>service ssh restart
+</pre></div>
+</li>
+</ol>
+<h3>Next steps</h3>
+<p>Add more tweaks to <code>/etc/ssh/sshd_config</code>.</p>
+<ol>
+<li><p>Change the SSH server port, set the value for port different from <code>22</code></p>
+
+<pre><code> Port 1022</code></pre>
+</li>
+<li><p><strong>Important!</strong> Before this step set up <a href="../sudoers/">sudoers</a> first and add <code>~/.ssh/authorized_keys</code> for the new users!</p>
+<div class="highlight"><pre><span></span>mkdir -p /home/SOME_USER/.ssh <span class="o">&amp;&amp;</span><span class="se">\</span>
+ chown SOME_USER:SOME_USER /home/SOME_USER/.ssh <span class="o">&amp;&amp;</span><span class="se">\</span>
+ chmod <span class="m">700</span> /home/SOME_USER/.ssh <span class="o">&amp;&amp;</span><span class="se">\</span>
+ cat &gt; /home/SOME_USER/.ssh/authorized_keys
+</pre></div>
+<p><strong>Login under SOME_USER, not the <code>root</code>!</strong> Because we are going to disable login for the <code>root</code>!</p>
+<div class="highlight"><pre><span></span>sudo vi /etc/ssh/sshd_config
+</pre></div>
+<p>add or update the setting</p>
+
+<pre><code> PermitRootLogin no</code></pre>
+</li>
+<li><p>Restart SSH server:</p>
+<div class="highlight"><pre><span></span>sudo service ssh restart
+</pre></div>
+</li>
+</ol>
+
+
+        </div>
+    </div>
+</div>
+
+<div class="container footer">
+    
+    <hr>
+    <p class="text-muted">&copy; 2016 05Bit</p>
+    
+</div>
+</body>
+</html>

@@ -1,5 +1,5 @@
 ---
-title: safer ssh
+title: Safer SSH
 ---
 
 How to configure SSH server for better security?
@@ -30,7 +30,7 @@ Default SSH configuration on most Linux distributions is relied on password auth
     ```
     ChallengeResponseAuthentication no
     PasswordAuthentication no
-    UsePAM no
+    UsePAM yes
     ```
 
 3. Restart SSH server:

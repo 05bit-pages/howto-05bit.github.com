@@ -42,19 +42,31 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     <ul class="nav nav-pills nav-stacked nav-tree">
-                        <li class="active">
+                        <li >
                             <a href="/" class="index">How To</a>
                             <hr>
                         </li>
                         
                             
                             <li >
-                                <a href="/linux_/" class="index">Linux Tips</a>
+                                <a href="/linux/" class="index">Linux Tips</a>
+                                
+                                <ul class="nav nav-pills nav-stacked">
+                                    
+                                    <li >
+                                        <a href="/linux/safer_ssh/">safer ssh</a>
+                                    </li>
+                                    
+                                    <li class="active">
+                                        <a href="/linux/sudoers/">sudoers</a>
+                                    </li>
+                                    
+                                </ul>
                                             
                             </li>
                             
                             <li >
-                                <a href="/services/" class="index">Services</a>
+                                <a href="/services/" >Services</a>
                                             
                             </li>
                             
@@ -66,8 +78,47 @@
         </div>
         <div class="col-md-9">
             
-    <h1>How To</h1>
-<p>The collection of tips about programming and system administration.</p>
+    <h1>How to add a user to sudoers?</h1>
+<p>You will probably need to add user to sudoers so they could run commands via <code>sudo</code>.</p>
+<ol>
+<li><p>First you may need to create the user under <code>root</code>.<br>
+Let's say we need to add the new <code>sentry</code> user:</p>
+<div class="highlight"><pre><span></span>adduser sentry
+</pre></div>
+<p>you'll see the output like that:</p>
+
+<pre><code> Adding user `sentry' ...
+ Adding new group `sentry' (1000) ...
+ Adding new user `sentry' (1000) with group `sentry' ...
+ Creating home directory `/home/sentry' ...
+ Copying files from `/etc/skel' ...
+ Enter new UNIX password:</code></pre>
+</li>
+<li><p>Then add the new user to the <code>sudo</code> group:</p>
+<div class="highlight"><pre><span></span>usermod -aG sudo sentry
+</pre></div>
+</li>
+</ol>
+<h3>Another way</h3>
+<ol>
+<li><p>Open the <code>/etc/sudoers</code> directly:</p>
+<div class="highlight"><pre><span></span>visudo
+</pre></div>
+<p>or</p>
+<div class="highlight"><pre><span></span>vi /etc/sudoers
+</pre></div>
+</li>
+<li><p>Add a new line for the specific user to sudoers file:</p>
+
+<pre><code> # User alias specification
+ sentry    ALL=(ALL:ALL) ALL</code></pre>
+</li>
+</ol>
+<h3>Related articles</h3>
+<ul>
+<li><a href="http://www.howtogeek.com/50787/add-a-user-to-a-group-or-second-group-on-linux/">Add a User to a Group (or Second Group) on Linux</a></li>
+<li><a href="https://www.digitalocean.com/community/tutorials/how-to-edit-the-sudoers-file-on-ubuntu-and-centos">How To Edit the Sudoers File on Ubuntu and CentOS</a></li>
+</ul>
 
 
         </div>

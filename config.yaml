@@ -7,17 +7,17 @@ copyright:  '&copy; 2016 05Bit'
 chapters:
   # Main chapters
   - index:            index.md
-    input_path:       .
+    input_path:       ./_sources
 
 # Rendering
 output:
   html:
-    build_path: ..
+    build_path: .
     theme:
       icons: awesome
     main_menu: []
-resources:  ./_resources
-templates:  ./_templates
+resources:  ./_sources/_resources
+templates:  ./_sources/_templates
 
 # Serving html
 server:

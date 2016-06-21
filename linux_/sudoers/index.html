@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>How To</title>
     <link rel="icon" type="image/png" href="/favicon.png?_=1" />
-    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css?_=1">
     <link rel="stylesheet" href="/assets/css/pygments.css">
     <link rel="stylesheet" href="/assets/css/docta.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
@@ -37,7 +37,46 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-lg-9">
+        <div class="col-md-3">
+            
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <ul class="nav nav-pills nav-stacked nav-tree">
+                        <li >
+                            <a href="/" class="index">How To</a>
+                            <hr>
+                        </li>
+                        
+                            
+                            <li >
+                                <a href="/linux_/" class="index">Linux Tips</a>
+                                
+                                <ul class="nav nav-pills nav-stacked">
+                                    
+                                    <li >
+                                        <a href="/linux_/safer_ssh/">Safer SSH</a>
+                                    </li>
+                                    
+                                    <li class="active">
+                                        <a href="/linux_/sudoers/">Sudoers</a>
+                                    </li>
+                                    
+                                </ul>
+                                            
+                            </li>
+                            
+                            <li >
+                                <a href="/services/" class="index">Services</a>
+                                            
+                            </li>
+                            
+                        
+                    </ul>
+                </div>
+            </div>
+            
+        </div>
+        <div class="col-md-9">
             
     <h1>How to add a user to sudoers?</h1>
 <p>You will probably need to add user to sudoers so they could run commands via <code>sudo</code>.</p>
@@ -82,40 +121,6 @@ Let's say we need to add the new <code>sentry</code> user:</p>
 </ul>
 
 
-        </div>
-        <div class="col-lg-3">
-            
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <ul class="nav nav-pills nav-stacked nav-tree">
-                        <li >
-                            <a href="/" class="index">How To</a>
-                            <hr>
-                        </li>
-                        
-                            
-                            <li >
-                                <a href="/Linux/" class="index">Linux Tips</a>
-                                
-                                <ul class="nav nav-pills nav-stacked">
-                                    
-                                    <li >
-                                        <a href="/Linux/safer_ssh/">safer ssh</a>
-                                    </li>
-                                    
-                                    <li class="active">
-                                        <a href="/Linux/sudoers/">sudoers</a>
-                                    </li>
-                                    
-                                </ul>
-                                            
-                            </li>
-                            
-                        
-                    </ul>
-                </div>
-            </div>
-            
         </div>
     </div>
 </div>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>How To</title>
+    <link rel="icon" type="image/png" href="/favicon.png?_=1" />
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css?_=1">
+    <link rel="stylesheet" href="/assets/css/pygments.css">
+    <link rel="stylesheet" href="/assets/css/docta.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            
+            <a class="navbar-brand logo" href="/" style="background-image: url(/assets/img/question.svg); width: 55px; background-size: 65%;"></a>
+            
+            <a class="navbar-brand" href="/">How To</a>
+        </div>
+
+        
+    </div>
+</nav>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <ul class="nav nav-pills nav-stacked nav-tree">
+                        <li >
+                            <a href="/" class="index">How To</a>
+                            <hr>
+                        </li>
+                        
+                            
+                            <li >
+                                <a href="/linux_/" class="index">Linux Tips</a>
+                                            
+                            </li>
+                            
+                            <li >
+                                <a href="/services/" class="index">Services</a>
+                                
+                                <ul class="nav nav-pills nav-stacked">
+                                    
+                                    <li class="active">
+                                        <a href="/services/sentry/">Sentry</a>
+                                    </li>
+                                    
+                                </ul>
+                                            
+                            </li>
+                            
+                        
+                    </ul>
+                </div>
+            </div>
+            
+        </div>
+        <div class="col-md-9">
+            
+    <h1>How to setup Sentry server?</h1>
+<p>The instruction is tested under <strong>Ubuntu 14.04 LTS</strong>.</p>
+<p>Login under <code>sentry</code> user with sudo rights.</p>
+<p>Then set up server locales to use UTF-8:</p>
+<div class="highlight"><pre><span></span>sudo locale-gen en_US.UTF-8
+sudo dpkg-reconfigure locales
+sudo update-locale <span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8 <span class="nv">LANGUAGE</span><span class="o">=</span>en_US.UTF-8 <span class="nv">LC_ALL</span><span class="o">=</span>en_US.UTF-8
+</pre></div>
+<p><strong>Check your current locale with <code>locale</code> command!</strong> If it's not UTF-8, try re-login.</p>
+<ol>
+<li><p>Add extra repositories:</p>
+<div class="highlight"><pre><span></span>sudo apt-get install -y software-properties-common
+sudo add-apt-repository -y ppa:chris-lea/redis-server
+</pre></div>
+</li>
+<li><p>Install Redis and PostgreSQL:</p>
+<div class="highlight"><pre><span></span>sudo apt-get install -y redis-server
+sudo apt-get install -y postgresql-client postgresql-9.3 postgresql-server-dev-9.3 postgresql-common postgresql-contrib
+</pre></div>
+</li>
+<li><p>Install required packages:</p>
+<div class="highlight"><pre><span></span>sudo apt-get install -y python-setuptools python-pip python-dev libxslt1-dev gcc libffi-dev libjpeg-dev libxml2-dev libxslt-dev libyaml-dev python-virtualenv
+</pre></div>
+</li>
+<li><p>Install Nginx</p>
+<div class="highlight"><pre><span></span>sudo apt-get remove -y apache2
+sudo apt-get install -y nginx-full
+</pre></div>
+</li>
+<li><p>Install and activate Virtualenv:</p>
+<div class="highlight"><pre><span></span>mkdir -p ~/env <span class="o">&amp;&amp;</span> virtualenv ~/env/sentry
+<span class="nb">source</span> ~/env/sentry/bin/activate
+</pre></div>
+</li>
+<li><p>Install Sentry</p>
+<div class="highlight"><pre><span></span>pip install sentry
+</pre></div>
+</li>
+<li><p>Init Sentry config</p>
+<div class="highlight"><pre><span></span>mkdir -p ~/etc/sentry <span class="o">&amp;&amp;</span> sentry init ~/etc/sentry
+</pre></div>
+</li>
+<li><p>Setup database</p>
+<div class="highlight"><pre><span></span><span class="nb">echo</span> -n <span class="s2">&quot;New database user password: &quot;</span> <span class="o">&amp;&amp;</span> <span class="nb">read</span> -s PASSWORD <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="o">&amp;&amp;</span><span class="se">\</span>
+sudo -u postgres createuser -dRS sentry <span class="o">&amp;&amp;</span><span class="se">\</span>
+sudo -u postgres psql -c <span class="s2">&quot;ALTER ROLE sentry WITH PASSWORD &#39;</span><span class="nv">$PASSWORD</span><span class="s2">&#39;;&quot;</span> <span class="o">&amp;&amp;</span><span class="se">\</span>
+<span class="nb">echo</span> <span class="s2">&quot;127.0.0.1:*:sentry:sentry:</span><span class="si">${</span><span class="nv">PASSWORD</span><span class="si">}</span><span class="s2">&quot;</span> &gt; ~/.pgpass <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="o">&amp;&amp;</span><span class="se">\</span>
+chmod <span class="m">600</span> ~/.pgpass <span class="o">&amp;&amp;</span><span class="se">\</span>
+createdb -E utf-8 sentry
+</pre></div>
+</li>
+</ol>
+<p>...</p>
+<h3>Related articles</h3>
+<ul>
+<li><a href="https://docs.getsentry.com/on-premise/server/installation/">https://docs.getsentry.com/on-premise/server/installation/</a></li>
+</ul>
+
+
+        </div>
+    </div>
+</div>
+
+<div class="container footer">
+    
+    <hr>
+    <p class="text-muted">&copy; 2016 05Bit</p>
+    
+</div>
+</body>
+</html>
