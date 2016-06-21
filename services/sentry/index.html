@@ -125,8 +125,177 @@ chmod <span class="m">600</span> ~/.pgpass <span class="o">&amp;&amp;</span><spa
 createdb -E utf-8 sentry
 </pre></div>
 </li>
+<li><p>Update Sentry config</p>
+<div class="highlight"><pre><span></span>vi ~/etc/sentry/sentry.conf.py
+</pre></div>
+<p>database config:</p>
+<div class="highlight"><pre><span></span><span class="n">DATABASES</span> <span class="o">=</span> <span class="p">{</span>
+ <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span>
+     <span class="s1">&#39;ENGINE&#39;</span><span class="p">:</span> <span class="s1">&#39;sentry.db.postgres&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;NAME&#39;</span><span class="p">:</span> <span class="s1">&#39;sentry&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;USER&#39;</span><span class="p">:</span> <span class="s1">&#39;sentry&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;PASSWORD&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;HOST&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;PORT&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+ <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>queue config:</p>
+<div class="highlight"><pre><span></span><span class="n">BROKER_URL</span> <span class="o">=</span> <span class="s1">&#39;redis://127.0.0.1:6379/0&#39;</span>
+</pre></div>
+<p>host config:</p>
+<div class="highlight"><pre><span></span><span class="n">SENTRY_WEB_HOST</span> <span class="o">=</span> <span class="s1">&#39;127.0.0.1&#39;</span>
+</pre></div>
+<p>disable sign ups:</p>
+<div class="highlight"><pre><span></span><span class="c1"># Disable registrations</span>
+<span class="n">SENTRY_FEATURES</span> <span class="o">=</span> <span class="p">{</span>
+ <span class="s1">&#39;auth:register&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+ <span class="s1">&#39;social-auth:register&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</li>
+<li><p>Run Sentry database migrations and create admin user:</p>
+<div class="highlight"><pre><span></span><span class="nv">SENTRY_CONF</span><span class="o">=</span><span class="nv">$HOME</span>/etc/sentry sentry upgrade
+<span class="nv">SENTRY_CONF</span><span class="o">=</span><span class="nv">$HOME</span>/etc/sentry sentry createuser
+</pre></div>
+</li>
+<li><p>Setup Nginx web proxy, no SSL</p>
+<p>Paste config to <code>~/etc/nginx/sentry</code>:</p>
+<div class="highlight"><pre><span></span><span class="k">server</span> <span class="p">{</span>
+    <span class="kn">listen</span> <span class="mi">80</span><span class="p">;</span>
+    <span class="kn">server_name</span> <span class="s">sentry.MYSITE.com</span><span class="p">;</span>
+
+    <span class="kn">root</span> <span class="s">/home/sentry/www</span><span class="p">;</span>
+
+    <span class="kn">location</span> <span class="p">~</span> <span class="sr">^/(\.well-known)/</span> <span class="p">{</span>
+        <span class="kn">root</span> <span class="s">/home/sentry/www</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kn">location</span> <span class="s">/</span> <span class="p">{</span>
+        <span class="kn">proxy_set_header</span> <span class="s">X-Forwarded-For</span> <span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+        <span class="kn">proxy_set_header</span> <span class="s">X-Forwarded-Proto</span> <span class="nv">$scheme</span><span class="p">;</span>
+        <span class="kn">proxy_set_header</span> <span class="s">Host</span> <span class="nv">$http_host</span><span class="p">;</span>
+        <span class="kn">proxy_redirect</span> <span class="no">off</span><span class="p">;</span>
+        <span class="kn">proxy_pass</span> <span class="s">http://127.0.0.1:9000</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>test config and restart:</p>
+<div class="highlight"><pre><span></span>sudo ln -s /home/sentry/etc/nginx/sentry /etc/nginx/sites-enabled/sentry
+sudo nginx -t
+sudo service nginx restart
+</pre></div>
+</li>
+<li><p>Install LetsEncrypt certificate</p>
+<div class="highlight"><pre><span></span>mkdir src <span class="o">&amp;&amp;</span> git clone https://github.com/letsencrypt/letsencrypt src/letsencrypt
+<span class="nb">cd</span> src/letsencrypt <span class="o">&amp;&amp;</span> ./letsencrypt-auto --help
+mkdir -p /home/sentry/www
+./letsencrypt-auto certonly --webroot -w /home/sentry/www -d sentry.MYSITE.com
+</pre></div>
+</li>
+<li><p>Setup Nginx web proxy, with SSL</p>
+<p>Paste config to <code>~/etc/nginx/sentry</code>:</p>
+<div class="highlight"><pre><span></span><span class="k">server</span> <span class="p">{</span>
+    <span class="kn">listen</span> <span class="mi">80</span><span class="p">;</span>
+    <span class="kn">server_name</span> <span class="s">sentry.MYSITE.com</span><span class="p">;</span>
+    <span class="kn">return</span> <span class="mi">301</span> <span class="s">https://</span><span class="nv">$host$request_uri</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">server</span> <span class="p">{</span>
+    <span class="kn">listen</span> <span class="mi">443</span> <span class="s">ssl</span><span class="p">;</span>
+    <span class="kn">server_name</span> <span class="s">sentry.MYSITE.com</span><span class="p">;</span>
+    <span class="kn">client_max_body_size</span> <span class="mi">4m</span><span class="p">;</span>
+
+    <span class="kn">ssl_certificate</span> <span class="s">/etc/letsencrypt/live/sentry.MYSITE.com/fullchain.pem</span><span class="p">;</span>
+    <span class="kn">ssl_certificate_key</span> <span class="s">/etc/letsencrypt/live/sentry.MYSITE.com/privkey.pem</span><span class="p">;</span>
+    <span class="kn">ssl_protocols</span> <span class="s">TLSv1</span> <span class="s">TLSv1.1</span> <span class="s">TLSv1.2</span><span class="p">;</span>
+    <span class="kn">ssl_prefer_server_ciphers</span> <span class="no">on</span><span class="p">;</span>
+    <span class="kn">ssl_ciphers</span> <span class="s">&#39;EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH&#39;</span><span class="p">;</span>
+
+    <span class="kn">root</span> <span class="s">/home/sentry/www</span><span class="p">;</span>
+
+    <span class="kn">location</span> <span class="p">~</span> <span class="sr">^/(\.well-known)/</span> <span class="p">{</span>
+        <span class="kn">root</span> <span class="s">/home/sentry/www</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kn">location</span> <span class="s">/</span> <span class="p">{</span>
+        <span class="kn">proxy_set_header</span> <span class="s">X-Forwarded-For</span> <span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+        <span class="kn">proxy_set_header</span> <span class="s">X-Forwarded-Proto</span> <span class="nv">$scheme</span><span class="p">;</span>
+        <span class="kn">proxy_set_header</span> <span class="s">Host</span> <span class="nv">$http_host</span><span class="p">;</span>
+        <span class="kn">proxy_redirect</span> <span class="no">off</span><span class="p">;</span>
+        <span class="kn">proxy_pass</span> <span class="s">http://127.0.0.1:9000</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>then test config and restart:</p>
+<div class="highlight"><pre><span></span>sudo nginx -t
+sudo service nginx restart
+</pre></div>
+</li>
+<li><p>Add UpStart scripts for main app</p>
+<p>Add config with <code>sudo vi /etc/init/sentry.conf</code>:</p>
+<div class="highlight"><pre><span></span>description <span class="s2">&quot;Sentry web application&quot;</span>
+start on runlevel <span class="o">[</span>2345<span class="o">]</span>
+stop on runlevel <span class="o">[</span>016<span class="o">]</span>
+respawn
+
+setuid sentry
+setgid sentry
+
+env <span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8
+env <span class="nv">SENTRY_CONF</span><span class="o">=</span>/home/sentry/etc/sentry
+
+script
+    <span class="nb">exec</span> /home/sentry/env/sentry/bin/sentry run web
+end script
+</pre></div>
+<p>start the service:</p>
+<div class="highlight"><pre><span></span>sudo service sentry start
+</pre></div>
+</li>
+<li><p>Add UpStart scripts for worker</p>
+<p>Add config with <code>sudo vi /etc/init/sentry-worker.conf</code>:</p>
+<div class="highlight"><pre><span></span>description <span class="s2">&quot;Sentry workers&quot;</span>
+start on runlevel <span class="o">[</span>2345<span class="o">]</span>
+stop on runlevel <span class="o">[</span>016<span class="o">]</span>
+respawn
+
+setuid sentry
+setgid sentry
+
+env <span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8
+env <span class="nv">SENTRY_CONF</span><span class="o">=</span>/home/sentry/etc/sentry
+
+script
+    <span class="nb">exec</span> /home/sentry/env/sentry/bin/sentry run worker
+end script
+</pre></div>
+<p>start the worker:</p>
+<div class="highlight"><pre><span></span>sudo service sentry-worker start
+</pre></div>
+</li>
+<li><p>Add UpStart scripts for cron</p>
+<p>Add config with <code>sudo vi /etc/init/sentry-cron.conf</code>:</p>
+<div class="highlight"><pre><span></span>description <span class="s2">&quot;Sentry cron&quot;</span>
+start on runlevel <span class="o">[</span>2345<span class="o">]</span>
+stop on runlevel <span class="o">[</span>016<span class="o">]</span>
+respawn
+
+setuid sentry
+setgid sentry
+
+env <span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8
+env <span class="nv">SENTRY_CONF</span><span class="o">=</span>/home/sentry/etc/sentry
+
+script
+    <span class="nb">exec</span> /home/sentry/env/sentry/bin/sentry run cron
+end script
+</pre></div>
+<p>start the Sentry cron:</p>
+<div class="highlight"><pre><span></span>sudo service sentry-cron start
+</pre></div>
+</li>
 </ol>
-<p>...</p>
 <h3>Related articles</h3>
 <ul>
 <li><a href="https://docs.getsentry.com/on-premise/server/installation/">https://docs.getsentry.com/on-premise/server/installation/</a></li>
