@@ -39,8 +39,14 @@
     <div class="row">
         <div class="col-sm-9">
             
-    <h1>How To</h1>
-<p>The collection of tips about programming and system administration.</p>
+    <h1>Docker Tips</h1>
+<h3>How to remove untagged images?</h3>
+<div class="highlight"><pre><span></span>docker rmi <span class="k">$(</span>docker images --filter <span class="s2">&quot;dangling=true&quot;</span> -q --no-trunc<span class="k">)</span>
+</pre></div>
+<h3>Related links</h3>
+<ul>
+<li><a href="http://stackoverflow.com/questions/32723111/how-to-remove-old-and-unused-docker-images">http://stackoverflow.com/questions/32723111/how-to-remove-old-and-unused-docker-images</a></li>
+</ul>
 
 
         </div>
@@ -49,7 +55,7 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     <ul class="nav nav-pills nav-stacked nav-tree">
-                        <li class="active">
+                        <li >
                             <a href="/" class="index">How To</a>
                             <hr>
                         </li>
@@ -65,7 +71,7 @@
                                             
                             </li>
                             
-                            <li >
+                            <li class="active">
                                 <a href="/docker/" >Docker</a>
                                             
                             </li>
