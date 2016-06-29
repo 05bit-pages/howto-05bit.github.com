@@ -39,11 +39,32 @@
     <div class="row">
         <div class="col-sm-9">
             
-    <h1>Services</h1>
-<p>Most tips are general but actually tested on <strong>Ubuntu 14.04 LTS</strong>.</p>
-<ul>
-<li><a href="sentry/">How to setup Sentry server?</a></li>
-</ul>
+    <h1>How to run DockerHub on start?</h1>
+<p>Create the DockerHub start script with <code>sudo vi /usr/local/bin/docker-hub-start</code>:</p>
+<div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="nv">IP_ADDR</span><span class="o">=</span><span class="sb">`</span>/usr/bin/dig +short f7458dd3-64ea-47b4-833c-8d340b12637d.priv.cloud.scaleway.com<span class="sb">`</span>
+/usr/bin/docker run --rm -p <span class="si">${</span><span class="nv">IP_ADDR</span><span class="si">}</span>:5000:5000 --name registry registry:2
+</pre></div>
+<p>Set exec permissions to the script:</p>
+<div class="highlight"><pre><span></span>sudo chmod +x /usr/local/bin/docker-hub-start
+</pre></div>
+<p>Create DockerHub systemd service definition to with <code>sudo vi /etc/systemd/system/docker-hub.service</code>:</p>
+<div class="highlight"><pre><span></span><span class="k">[Unit]</span>
+<span class="na">Description</span><span class="o">=</span><span class="s">DockerHub service</span>
+<span class="na">Requires</span><span class="o">=</span><span class="s">docker.service</span>
+<span class="na">After</span><span class="o">=</span><span class="s">docker.service</span>
+
+<span class="k">[Service]</span>
+<span class="na">Restart</span><span class="o">=</span><span class="s">always</span>
+<span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/local/bin/docker-hub-start</span>
+<span class="na">ExecStop</span><span class="o">=</span><span class="s">/usr/bin/docker stop -t 2 registry</span>
+
+<span class="k">[Install]</span>
+<span class="na">WantedBy</span><span class="o">=</span><span class="s">default.target</span>
+</pre></div>
+<p>Run the service:</p>
+<div class="highlight"><pre><span></span>sudo systemctl start docker-hub
+</pre></div>
 
 
         </div>
@@ -63,13 +84,21 @@
                                             
                             </li>
                             
-                            <li class="active">
+                            <li >
                                 <a href="/services/" class="index">Services</a>
                                             
                             </li>
                             
                             <li >
                                 <a href="/docker/" class="index">Docker</a>
+                                
+                                <ul class="nav nav-pills nav-stacked">
+                                    
+                                    <li class="active">
+                                        <a href="/docker/dockerhub/">Dockerhub</a>
+                                    </li>
+                                    
+                                </ul>
                                             
                             </li>
                             
