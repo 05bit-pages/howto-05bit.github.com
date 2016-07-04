@@ -40,12 +40,12 @@
         <div class="col-sm-9">
             
     <h1>Shell Tips</h1>
-<h3>How to remove all files matching pattern recursively?</h3>
+<h3>How to remove all *.pyc files recursively?</h3>
 <div class="highlight"><pre><span></span>find . -name <span class="s2">&quot;*.pyc&quot;</span> -delete
 </pre></div>
 <p>or</p>
-<p><code>bash
-find . -name "*.pyc" -exec rm -f {} \;</code>bash</p>
+<div class="highlight"><pre><span></span>find . -name <span class="s2">&quot;*.pyc&quot;</span> -exec rm -f <span class="o">{}</span> <span class="se">\;</span>
+</pre></div>
 
 
         </div>
