@@ -39,10 +39,30 @@
     <div class="row">
         <div class="col-sm-9">
             
-    <h1>Services</h1>
-<p>Most tips are general but actually tested on <strong>Ubuntu 14.04 LTS</strong>.</p>
+    <h1>Sublime Text 3</h1>
+<h3>How to ignore files and/or dirs in projects?</h3>
+<div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;folders&quot;</span><span class="p">:</span>
+    <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;src&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;folder_exclude_patterns&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;backup&quot;</span><span class="p">],</span>
+            <span class="nt">&quot;follow_symlinks&quot;</span><span class="p">:</span> <span class="kc">true</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+            <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;docs&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;file_exclude_patterns&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;*.tmp&quot;</span><span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+<p>Read more:</p>
 <ul>
-<li><a href="sentry/">How to setup Sentry server?</a></li>
+<li><a href="https://www.sublimetext.com/docs/3/projects.html">https://www.sublimetext.com/docs/3/projects.html</a></li>
+</ul>
+<h3>Related links</h3>
+<ul>
+<li><a href="https://www.sublimetext.com/docs/3/index.html">https://www.sublimetext.com/docs/3/index.html</a></li>
 </ul>
 
 
@@ -63,7 +83,7 @@
                                             
                             </li>
                             
-                            <li class="active">
+                            <li >
                                 <a href="/services/" class="index">Services</a>
                                             
                             </li>
@@ -73,7 +93,7 @@
                                             
                             </li>
                             
-                            <li >
+                            <li class="active">
                                 <a href="/sublime/" >SublimeText3</a>
                                             
                             </li>
