@@ -39,12 +39,18 @@
     <div class="row">
         <div class="col-sm-9">
             
-    <h1>Linux Tips</h1>
-<p>Most tips are general but actually tested on <strong>Ubuntu 14.04 LTS</strong>.</p>
-<ul>
-<li><a href="sudoers/">How to add user to sudoers?</a></li>
-<li><a href="safer_ssh/">How to configure SSH server for better security?</a></li>
-</ul>
+    <h1>PostgreSQL Tips</h1>
+<h2>How to set password for user?</h2>
+
+<pre><code>psql -c '\password' postgres</code></pre>
+<p>Enter the new password here.</p>
+<p>Add that password to <code>~/.pgpass</code>:</p>
+<div class="highlight"><pre><span></span>cat &gt; ~/.pgpass <span class="o">&amp;&amp;</span> chmod <span class="m">600</span> ~/.pgpass
+</pre></div>
+<p>paste the line replacing <code>&lt;user&gt;</code> and <code>&lt;password&gt;</code> values:</p>
+
+<pre><code>127.0.0.1:*:*:&lt;user&gt;:&lt;password&gt;</code></pre>
+<p>(^D for save)</p>
 
 
         </div>
@@ -59,7 +65,7 @@
                         </li>
                         
                             
-                            <li class="active">
+                            <li >
                                 <a href="/linux/" class="index">Linux Tips</a>
                                 
                             </li>
@@ -84,7 +90,7 @@
                                 
                             </li>
                             
-                            <li >
+                            <li class="active">
                                 <a href="/postgres/" >PostgreSQL</a>
                                 
                             </li>
