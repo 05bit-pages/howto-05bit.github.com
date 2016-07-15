@@ -9,7 +9,7 @@ PostgreSQL Tips
 How to set password for user?
 -----------------------------
 
-```
+```bash
 psql -c '\password' postgres
 ```
 
@@ -23,7 +23,7 @@ cat > ~/.pgpass && chmod 600 ~/.pgpass
 
 paste the line replacing `<user>` and `<password>` values:
 
-```
+```bash
 127.0.0.1:*:*:<user>:<password>
 ```
 
