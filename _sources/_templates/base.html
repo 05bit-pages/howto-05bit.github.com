@@ -33,11 +33,9 @@
         {% if project.main_menu %}
         <div class="navbar-left" role="navigation">
             <ul class="nav navbar-nav">
-                {% for item in project.main_menu %}
-                <li {% if chapter_url(chapter).lstrip('/') == item.url.lstrip('/') %} class="active"{% endif %}>
-                    <a href="{{ url(item.url) }}" {% if url_external(item.url) %}target="_blank"{% endif %}>{{ icon(item.icon) }}{{ item.title }}</a>
-                </li>
-                {% endfor %}
+                {% for item in project.main_menu -%}
+                <li{% if chapter_url(chapter).lstrip('/') == item.url.lstrip('/') %} class="active"{% endif %}><a href="{{ url(item.url) }}" {% if url_external(item.url) %}target="_blank"{% endif %}>{{ icon(item.icon) }}{{ item.title }}</a></li>
+                {%- endfor %}
             </ul>
         </div>
         {% endif %}
@@ -61,12 +59,12 @@
                         </li>
                         {% if top.children %}
                             {% for ch1 in top.children %}
-                            <li {% if ch1 == chapter %}class="active"{% endif %}>
+                            <li{% if ch1 == chapter %} class="active"{% endif %}>
                                 <a href="{{ chapter_url(ch1) }}" {% if ch1.is_index and ch1.children %}class="index"{% endif %}>{{ icon(ch1.icon) }}{{ ch1.title }}</a>
                                 {% if ch1.children and (chapter in ch1.children) %}
                                 <ul class="nav nav-pills nav-stacked">
                                     {% for ch2 in ch1.children %}
-                                    <li {% if ch2 == chapter %}class="active"{% endif %}>
+                                    <li{% if ch2 == chapter %} class="active"{% endif %}>
                                         <a href="{{ chapter_url(ch2) }}">{{ ch2.title }}</a>
                                     </li>
                                     {% endfor %}

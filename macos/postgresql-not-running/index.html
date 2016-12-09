@@ -39,18 +39,18 @@
     <div class="row">
         <div class="col-sm-9">
             
-    <h1>PostgreSQL Tips</h1>
-<h2>How to set password for user?</h2>
-<div class="highlight"><pre><span></span>psql -c <span class="s1">&#39;\password&#39;</span> postgres
+    <h1>PostgreSQL is not running</h1>
+<p>PostgreSQL is installed but not running. How to start it?</p>
+<p>First, just try:</p>
+<div class="highlight"><pre><span></span>brew services start postgresql
 </pre></div>
-<p>Enter the new password here.</p>
-<p>Add that password to <code>~/.pgpass</code>:</p>
-<div class="highlight"><pre><span></span>cat &gt; ~/.pgpass <span class="o">&amp;&amp;</span> chmod <span class="m">600</span> ~/.pgpass
+<p>If it doesn't help, the most probably reason in present <code>postmaster.pid</code> file, just remove it:</p>
+<div class="highlight"><pre><span></span>rm /usr/local/var/postgres/postmaster.pid
 </pre></div>
-<p>paste the line replacing <code>&lt;user&gt;</code> and <code>&lt;password&gt;</code> values:</p>
-<div class="highlight"><pre><span></span>127.0.0.1:*:*:&lt;user&gt;:&lt;password&gt;
-</pre></div>
-<p>(^D for save)</p>
+<h3>Related articles</h3>
+<ul>
+<li><a href="https://coderwall.com/p/zf-fww/postgres-on-osx-with-homebrew-not-running-after-osx-crash">https://coderwall.com/p/zf-fww/postgres-on-osx-with-homebrew-not-running-after-osx-crash</a></li>
+</ul>
 
 
         </div>
@@ -72,6 +72,14 @@
                             
                             <li>
                                 <a href="/macos/" class="index">macOS Tips</a>
+                                
+                                <ul class="nav nav-pills nav-stacked">
+                                    
+                                    <li class="active">
+                                        <a href="/macos/postgresql-not-running/">PostgreSQL is not running</a>
+                                    </li>
+                                    
+                                </ul>
                                 
                             </li>
                             
@@ -95,7 +103,7 @@
                                 
                             </li>
                             
-                            <li class="active">
+                            <li>
                                 <a href="/postgres/" >PostgreSQL</a>
                                 
                             </li>

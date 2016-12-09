@@ -39,18 +39,11 @@
     <div class="row">
         <div class="col-sm-9">
             
-    <h1>PostgreSQL Tips</h1>
-<h2>How to set password for user?</h2>
-<div class="highlight"><pre><span></span>psql -c <span class="s1">&#39;\password&#39;</span> postgres
-</pre></div>
-<p>Enter the new password here.</p>
-<p>Add that password to <code>~/.pgpass</code>:</p>
-<div class="highlight"><pre><span></span>cat &gt; ~/.pgpass <span class="o">&amp;&amp;</span> chmod <span class="m">600</span> ~/.pgpass
-</pre></div>
-<p>paste the line replacing <code>&lt;user&gt;</code> and <code>&lt;password&gt;</code> values:</p>
-<div class="highlight"><pre><span></span>127.0.0.1:*:*:&lt;user&gt;:&lt;password&gt;
-</pre></div>
-<p>(^D for save)</p>
+    <h1>macOS Tips</h1>
+<p>Most tips are general but actually tested on <strong>macOS Sierra</strong>.</p>
+<ul>
+<li><a href="postgresql-not-running/">PostgreSQL is installed but not running. How to start it?</a></li>
+</ul>
 
 
         </div>
@@ -70,7 +63,7 @@
                                 
                             </li>
                             
-                            <li>
+                            <li class="active">
                                 <a href="/macos/" class="index">macOS Tips</a>
                                 
                             </li>
@@ -95,7 +88,7 @@
                                 
                             </li>
                             
-                            <li class="active">
+                            <li>
                                 <a href="/postgres/" >PostgreSQL</a>
                                 
                             </li>
