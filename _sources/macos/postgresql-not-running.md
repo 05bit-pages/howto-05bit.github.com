@@ -22,3 +22,4 @@ rm /usr/local/var/postgres/postmaster.pid
 ### Related articles
 
 - https://coderwall.com/p/zf-fww/postgres-on-osx-with-homebrew-not-running-after-osx-crash
+- https://keita.blog/2016/01/09/homebrew-and-postgresql-9-5/
